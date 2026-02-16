@@ -1,7 +1,12 @@
 package com.andrei.springboot.model;
 
-public class Todo {
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "tasks")
+public class Todo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private boolean completed;
