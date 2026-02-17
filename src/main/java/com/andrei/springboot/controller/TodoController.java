@@ -45,4 +45,24 @@ public class TodoController {
     public Todo findById(@PathVariable Long id){
         return todoService.findById(id);
     }
+
+    @GetMapping("/completed")
+    public List<Todo> getCompleted() {
+        return todoService.findCompleted();
+    }
+
+    @GetMapping("/incompleted")
+    public List<Todo> getIncompleted(){
+        return todoService.findIncompleted();
+    }
+
+    @GetMapping("/even")
+    public List<Todo> getEvenIdTasks(){
+        return todoService.findIdEven();
+    }
+
+    @PatchMapping("/{id}/toggle")
+    public Todo toggle(@PathVariable Long id) {
+        return todoService.toggleCompleted(id);
+    }
 }

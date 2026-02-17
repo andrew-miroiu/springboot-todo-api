@@ -12,4 +12,8 @@ public interface TodoService {
     Todo update(Long id,UpdateTodoRequest updateRequest);
     void delete(Long id);
     Todo findById(Long id);
+    List<Todo> findCompleted();
+    List<Todo> findIncompleted();
+    List<Todo> findIdEven();
+    Todo toggleCompleted(Long id);
 }
