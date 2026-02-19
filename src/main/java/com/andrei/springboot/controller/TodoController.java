@@ -2,7 +2,9 @@ package com.andrei.springboot.controller;
 
 import com.andrei.springboot.model.Todo;
 import com.andrei.springboot.dto.TodoCreateRequest;
+import com.andrei.springboot.dto.TodoRequest;
 import com.andrei.springboot.dto.UpdateTodoRequest;
+import com.andrei.springboot.dto.UpdateTitleRequest;
 import com.andrei.springboot.service.TodoService;
 
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +28,10 @@ public class TodoController {
         return todoService.findAll();
     }
 
-    @PostMapping
-    public Todo create(@RequestBody TodoCreateRequest request) {
-        return todoService.create(request);
+    @PostMapping("/users/{userId}/todos")
+    public Todo createTodo(@PathVariable Long userId, @RequestBody TodoRequest request) { 
+
+        return todoService.createTodo(userId, request.getTitle());
     }
 
     @PutMapping("/{id}")
@@ -64,5 +67,10 @@ public class TodoController {
     @PatchMapping("/{id}/toggle")
     public Todo toggle(@PathVariable Long id) {
         return todoService.toggleCompleted(id);
+    }
+
+    @PatchMapping("/{id}/changeTitle")
+    public Todo changeTitle(@PathVariable Long id, @RequestBody UpdateTitleRequest titleRequest){
+        return todoService.updateTitle(id, titleRequest.getTitle());
     }
 }

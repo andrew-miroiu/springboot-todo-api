@@ -1,6 +1,7 @@
 package com.andrei.springboot.model;
 
 import jakarta.persistence.*;
+import com.andrei.springboot.model.User;
 
 @Entity
 @Table(name = "tasks")
@@ -10,6 +11,10 @@ public class Todo {
     private Long id;
     private String title;
     private boolean completed;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Todo() {}
 
@@ -27,4 +32,12 @@ public class Todo {
 
     public boolean isCompleted() { return completed; }
     public void setCompleted(boolean completed) { this.completed = completed; }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

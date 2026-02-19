@@ -4,11 +4,13 @@ import com.andrei.springboot.dto.TodoCreateRequest;
 import com.andrei.springboot.dto.UpdateTodoRequest;
 import com.andrei.springboot.model.Todo;
 import com.andrei.springboot.repository.TaskRepository;
+import com.andrei.springboot.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.transaction.annotation.Transactional;
+import com.andrei.springboot.model.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,12 +19,14 @@ import java.util.Optional;
 public class TodoServiceImpl implements TodoService {
 
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public TodoServiceImpl(TaskRepository taskRepository) {
+    public TodoServiceImpl(TaskRepository taskRepository, UserRepository userRepository) {
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -31,12 +35,19 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public Todo create(TodoCreateRequest request) {
+    public Todo createTodo(Long userId, String title) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         Todo todo = new Todo();
-        todo.setTitle(request.getTitle());
-        todo.setCompleted(request.isCompleted());
+        todo.setTitle(title);
+        todo.setCompleted(false);
+        todo.setUser(user);
+
         return taskRepository.save(todo);
     }
+
 
     @Override
     public Todo update(Long id, UpdateTodoRequest request) {
@@ -48,6 +59,17 @@ public class TodoServiceImpl implements TodoService {
             return taskRepository.save(todo);
         }
         throw new RuntimeException("Todo not found with id " + id);
+    }
+
+    @Override
+    @Transactional
+    public Todo updateTitle(Long id, String title){
+        Todo todo = taskRepository.findById(id)
+            .orElseThrow(() ->
+                    new RuntimeException("Todo not found with id " + id));
+
+        todo.setTitle(title);
+        return todo;
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface TodoService {
     List<Todo> findAll();
-    Todo create(TodoCreateRequest request);
+    Todo createTodo(Long userId, String title);
     Todo update(Long id,UpdateTodoRequest updateRequest);
     void delete(Long id);
     Todo findById(Long id);
@@ -16,4 +16,5 @@ public interface TodoService {
     List<Todo> findIncompleted();
     List<Todo> findIdEven();
     Todo toggleCompleted(Long id);
+    Todo updateTitle(Long id, String Title);
 }
