@@ -9,6 +9,7 @@ import java.util.List;
 public interface TodoService {
     List<Todo> findAll();
     Todo createTodo(Long userId, String title);
+    Todo createTodoJwt(String title);
     Todo update(Long id,UpdateTodoRequest updateRequest);
     void delete(Long id);
     Todo findById(Long id);

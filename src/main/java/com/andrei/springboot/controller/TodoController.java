@@ -7,6 +7,7 @@ import com.andrei.springboot.dto.UpdateTodoRequest;
 import com.andrei.springboot.dto.UpdateTitleRequest;
 import com.andrei.springboot.service.TodoService;
 
+
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
@@ -32,6 +33,11 @@ public class TodoController {
     public Todo createTodo(@PathVariable Long userId, @RequestBody TodoRequest request) { 
 
         return todoService.createTodo(userId, request.getTitle());
+    }
+
+    @PostMapping("/create")
+    public Todo createTodoJwtAuth(@RequestBody TodoRequest request){
+        return todoService.createTodoJwt(request.getTitle());
     }
 
     @PutMapping("/{id}")
