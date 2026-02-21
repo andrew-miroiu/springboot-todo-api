@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.andrei.springboot.repository.UserRepository;
 import com.andrei.springboot.model.User;
+import com.andrei.springboot.security.CustomUserDetails;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -48,13 +49,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        CustomUserDetails userDetails =
+        new CustomUserDetails(user.getId(), user.getUsername());
+        
         System.out.println("Username from token: " + username);
 
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(
-                        user.getId(),
+                        userDetails,
                         null,
-                        Collections.emptyList()
+                        userDetails.getAuthorities()
                 );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);

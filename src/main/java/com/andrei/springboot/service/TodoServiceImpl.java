@@ -12,6 +12,7 @@ import jakarta.persistence.TypedQuery;
 import org.springframework.transaction.annotation.Transactional;
 import com.andrei.springboot.model.User;
 import org.springframework.security.core.context.SecurityContextHolder;
+import com.andrei.springboot.security.CustomUserDetails;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +53,9 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public Todo createTodoJwt(String title) {
 
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CustomUserDetails userDetails =(CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userId = userDetails.getId();
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
